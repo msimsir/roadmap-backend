@@ -1,20 +1,11 @@
-import { ApolloServer, gql } from "apollo-server-express";
+import { ApolloServer } from "apollo-server-express";
 import { ApolloServerPluginLandingPageLocalDefault } from "apollo-server-core";
 import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
+import typeDefs from "./typeDefs";
+import resolvers from "./resolvers";
 
-const typeDefs = gql`
-  type Query {
-    hello: String!
-  }
-`;
-
-const resolvers = {
-  Query: {
-    hello: () => "hi",
-  },
-};
 dotenv.config();
 const app = express();
 async function startApolloServer() {
