@@ -1,18 +1,31 @@
 import { gql } from "apollo-server-express";
 
 const userTypeDefs = gql`
-  type User {
-    _id: String
-    username: String
-    email: String
-    password: String
-  }
   type Query {
-    user(_id: ID!): User
+    user(_id: ID!): User!
+    me: User!
   }
   type Mutation {
-    signUp(username: String, email: String, password: String): User
-    signIn(email: String, password: String): User
+    signUp(
+      firstName: String!
+      lastName: String!
+      username: String!
+      email: String!
+      password: String!
+    ): AuthPayload!
+    signIn(email: String!, password: String!): AuthPayload!
+  }
+  type User {
+    _id: String!
+    firstName: String!
+    lastName: String!
+    username: String!
+    email: String!
+  }
+
+  type AuthPayload {
+    user: User!
+    token: String!
   }
 `;
 

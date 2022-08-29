@@ -1,10 +1,18 @@
 import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema({
+  firstName: {
+    type: String,
+    required: true,
+  },
+  lastName: {
+    type: String,
+    required: true,
+  },
   username: {
     type: String,
     unique: true,
-    required: true
+    required: true,
   },
   email: {
     type: String,
@@ -15,8 +23,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
     minlength: 7,
-    maxlength: 42
-  }
+  },
 });
 
 const User = mongoose.model("User", userSchema);

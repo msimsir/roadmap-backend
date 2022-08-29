@@ -1,3 +1,5 @@
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 import { User } from "../models";
 
 const userResolvers = {
@@ -7,15 +9,45 @@ const userResolvers = {
     },
   },
   Mutation: {
-    signUp: async (_, { username, email, password }) => {
-      const user = new User({ username, email, password });
-      await user.save();
-      return user;
+    signUp: async (_, { firstName, lastName, username, email, password }) => {
+      try {
+        const existingUser = await User.findOne({ email });
+        if (existingUser) throw new Error("USER ALREADY EXISTS");
+        const hashedPassword = await bcrypt.hash(password, 12);
+        const user = await User.create({
+          firstName,
+          lastName,
+          username,
+          email,
+          password: hashedPassword,
+        });
+        const token = jwt.sign(
+          { email: user.email, id: user._id },
+          process.env.JWT_KEY,
+          { expiresIn: "1h" }
+        );
+        return { user, token };
+      } catch (error) {
+        throw new Error(error);
+      }
     },
     signIn: async (_, { email, password }) => {
-      const user = await User.find({ email, password });
-      if (!user) {
-        throw new Error("USER DOES NOT EXIST");
+      try {
+        const existingUser = await User.findOne({ email });
+        if (existingUser) throw new Error("USER ALREADY EXISTS");
+        const isPasswordCorrect = await bcrypt.compare(
+          password,
+          existingUser.password
+        );
+        if (!isPasswordCorrect) throw new Error("INVALID CREDENTIALS");
+        const token = jwt.sign(
+          { email: existingUser.email, id: existingUser._id },
+          process.env.JWT_KEY,
+          { expiresIn: "1h" }
+        );
+        return { existingUser, token };
+      } catch (error) {
+        throw new Error(error);
       }
     },
   },
