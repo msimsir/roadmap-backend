@@ -7,8 +7,17 @@ const roadmapResolvers = {
     },
   },
   Mutation: {
-    createRoadmap: async (_, { title, description, tags, userId }) => {
-      const roadmap = new Roadmap({ title, description, tags, userId });
+    createRoadmap: async (
+      _,
+      { title, description, tags, elements, userId }
+    ) => {
+      const roadmap = new Roadmap({
+        title,
+        description,
+        tags,
+        elements,
+        userId,
+      });
       await roadmap.save();
       return roadmap;
     },

@@ -6,6 +6,7 @@ const roadmapTypeDefs = gql`
     title: String
     description: String
     tags: [String]
+    elements: String
     userId: String
   }
   type Query {
@@ -16,6 +17,7 @@ const roadmapTypeDefs = gql`
       title: String
       description: String
       tags: [String]
+      elements: String
       userId: String
     ): Roadmap
   }

@@ -34,7 +34,7 @@ const userResolvers = {
     signIn: async (_, { email, password }) => {
       try {
         const existingUser = await User.findOne({ email });
-        if (existingUser) throw new Error("USER ALREADY EXISTS");
+        if (!existingUser) throw new Error("USER DOESN'T EXIST");
         const isPasswordCorrect = await bcrypt.compare(
           password,
           existingUser.password
@@ -45,7 +45,7 @@ const userResolvers = {
           process.env.JWT_KEY,
           { expiresIn: "1h" }
         );
-        return { existingUser, token };
+        return { user: existingUser, token };
       } catch (error) {
         throw new Error(error);
       }
