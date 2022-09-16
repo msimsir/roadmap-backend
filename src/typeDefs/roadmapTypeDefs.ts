@@ -8,6 +8,7 @@ const roadmapTypeDefs = gql`
     tags: [String]
     elements: String
     userId: String
+    likes: [String]
   }
   type RoadmapResult {
     roadmaps: [Roadmap]
@@ -27,6 +28,7 @@ const roadmapTypeDefs = gql`
       elements: String!
       userId: String!
     ): Roadmap
+    likeRoadmap(_id: ID!): Roadmap
   }
 `;
 

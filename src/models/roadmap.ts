@@ -15,6 +15,9 @@ const roadmapSchema = new mongoose.Schema({
     required: true,
   },
   userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
+  likes: [
+    { type: mongoose.Schema.Types.ObjectId, ref: "User", required: false },
+  ],
 });
 
 const Roadmap = mongoose.model("Roadmap", roadmapSchema);
